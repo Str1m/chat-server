@@ -11,7 +11,6 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
-	_ "google.golang.org/protobuf/types/known/wrapperspb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -158,9 +157,10 @@ func (x *DeleteRequest) GetId() int64 {
 
 type SendMessageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	From          string                 `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
-	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	ChatId        int64                  `protobuf:"varint,1,opt,name=chat_id,json=chatId,proto3" json:"chat_id,omitempty"`
+	From          string                 `protobuf:"bytes,2,opt,name=from,proto3" json:"from,omitempty"`
+	Text          string                 `protobuf:"bytes,3,opt,name=text,proto3" json:"text,omitempty"`
+	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -195,6 +195,13 @@ func (*SendMessageRequest) Descriptor() ([]byte, []int) {
 	return file_chat_server_proto_rawDescGZIP(), []int{3}
 }
 
+func (x *SendMessageRequest) GetChatId() int64 {
+	if x != nil {
+		return x.ChatId
+	}
+	return 0
+}
+
 func (x *SendMessageRequest) GetFrom() string {
 	if x != nil {
 		return x.From
@@ -220,17 +227,18 @@ var File_chat_server_proto protoreflect.FileDescriptor
 
 const file_chat_server_proto_rawDesc = "" +
 	"\n" +
-	"\x11chat-server.proto\x12\achat_v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1egoogle/protobuf/wrappers.proto\"-\n" +
+	"\x11chat-server.proto\x12\achat_v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"-\n" +
 	"\rCreateRequest\x12\x1c\n" +
 	"\tusernames\x18\x01 \x03(\tR\tusernames\" \n" +
 	"\x0eCreateResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"\x1f\n" +
 	"\rDeleteRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"v\n" +
-	"\x12SendMessageRequest\x12\x12\n" +
-	"\x04from\x18\x01 \x01(\tR\x04from\x12\x12\n" +
-	"\x04text\x18\x02 \x01(\tR\x04text\x128\n" +
-	"\ttimestamp\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp2\xbf\x01\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"\x8f\x01\n" +
+	"\x12SendMessageRequest\x12\x17\n" +
+	"\achat_id\x18\x01 \x01(\x03R\x06chatId\x12\x12\n" +
+	"\x04from\x18\x02 \x01(\tR\x04from\x12\x12\n" +
+	"\x04text\x18\x03 \x01(\tR\x04text\x128\n" +
+	"\ttimestamp\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp2\xbf\x01\n" +
 	"\x04Chat\x129\n" +
 	"\x06Create\x12\x16.chat_v1.CreateRequest\x1a\x17.chat_v1.CreateResponse\x128\n" +
 	"\x06Delete\x12\x16.chat_v1.DeleteRequest\x1a\x16.google.protobuf.Empty\x12B\n" +
