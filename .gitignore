@@ -40,7 +40,7 @@ Thumbs.db
 testdata/**/out.*
 
 # Go's build cache (optional)
-**/pkg/
+# **/pkg/
 *.a
 
 # Coverage results
