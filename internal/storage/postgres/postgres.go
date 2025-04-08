@@ -34,7 +34,7 @@ func (s *Storage) CreateChat(ctx context.Context, usernames []string) (int64, er
 	if err != nil {
 		return 0, err
 	}
-	defer tx.Rollback()
+	// defer tx.Rollback()
 
 	var chatID int64
 	err = tx.QueryRow(`INSERT INTO chats DEFAULT VALUES RETURNING id`).Scan(&chatID)
@@ -49,12 +49,12 @@ func (s *Storage) CreateChat(ctx context.Context, usernames []string) (int64, er
 	defer stmt.Close()
 
 	for _, email := range usernames {
-		if _, err := stmt.Exec(chatID, email); err != nil {
+		if _, err = stmt.Exec(chatID, email); err != nil {
 			return 0, err
 		}
 	}
 
-	if err := tx.Commit(); err != nil {
+	if err = tx.Commit(); err != nil {
 		return 0, err
 	}
 
@@ -75,7 +75,8 @@ func (s *Storage) SendMessage(msg models.Message) error {
 }
 
 func (s *Storage) GetMessages(chatID int64) ([]models.Message, error) {
-	rows, err := s.db.Query(`SELECT id, chat_id, sender, text, timestamp FROM message WHERE chat_id = $1 ORDER BY timestamp`, chatID)
+	rows, err := s.db.Query(`SELECT id, chat_id, sender, text, timestamp 
+	FROM message WHERE chat_id = $1 ORDER BY timestamp`, chatID)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +85,7 @@ func (s *Storage) GetMessages(chatID int64) ([]models.Message, error) {
 	var messages []models.Message
 	for rows.Next() {
 		var msg models.Message
-		if err := rows.Scan(&msg.ID, &msg.ChatID, &msg.Sender, &msg.Text, &msg.Timestamp); err != nil {
+		if err = rows.Scan(&msg.ID, &msg.ChatID, &msg.Sender, &msg.Text, &msg.Timestamp); err != nil {
 			return nil, err
 		}
 		messages = append(messages, msg)

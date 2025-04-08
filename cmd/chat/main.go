@@ -53,7 +53,7 @@ func main() {
 		Timestamp: time.Now(),
 	}
 
-	if err := store.SendMessage(msg); err != nil {
+	if err = store.SendMessage(msg); err != nil {
 		log.Fatalf("cannot send message: %v", err)
 	}
 	fmt.Println("Message sent!")
